@@ -26,20 +26,15 @@ const DataPreview = ({ sheets, activeSheet, setActiveSheet, setSheets }) => {
   };
 
   const confirmDelete = () => {
-    if (rowToDelete === null) return;
-    setSheets((prevSheets) => {
-      const updatedRows = prevSheets[activeSheet].filter((_, idx) => idx !== rowToDelete + 1);
-      return {
-        ...prevSheets,
-        [activeSheet]: [headers, ...updatedRows],
-      };
-    });
+    const updatedRows = rows.filter((_, idx) => idx !== rowToDelete);
+    setSheets({ ...sheets, [activeSheet]: [headers, ...updatedRows] });
     setShowConfirm(false);
   };
 
   const formatCell = (cell) => {
     if (!cell) return "-";
-    if (/\d{4}-\d{2}-\d{2}/.test(cell)) return format(new Date(cell), "dd-MM-yyyy");
+    if (/\d{4}-\d{2}-\d{2}/.test(cell))
+      return format(new Date(cell), "dd-MM-yyyy");
     if (!isNaN(cell)) return IndianNumberFormat(cell);
     return cell;
   };
@@ -47,14 +42,18 @@ const DataPreview = ({ sheets, activeSheet, setActiveSheet, setSheets }) => {
   return (
     <div className="mt-6 bg-white p-6 rounded-lg shadow-lg border border-gray-200">
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-1">Select Sheet</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Select Sheet
+        </label>
         <select
           className="w-full cursor-pointer p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
           value={activeSheet}
           onChange={(e) => setActiveSheet(e.target.value)}
         >
           {Object.keys(sheets).map((sheet) => (
-            <option key={sheet} value={sheet}>{sheet}</option>
+            <option key={sheet} value={sheet}>
+              {sheet}
+            </option>
           ))}
         </select>
       </div>
@@ -64,18 +63,26 @@ const DataPreview = ({ sheets, activeSheet, setActiveSheet, setSheets }) => {
           <thead className="bg-blue-100">
             <tr>
               {headers.map((col, index) => (
-                <th key={index} className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase border-b border-gray-300">
+                <th
+                  key={index}
+                  className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase border-b border-gray-300"
+                >
                   {col}
                 </th>
               ))}
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase border-b border-gray-300">Actions</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase border-b border-gray-300">
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {currentRows.map((row, rowIndex) => (
               <tr key={rowIndex} className="hover:bg-gray-50 transition">
                 {row.map((cell, cellIndex) => (
-                  <td key={cellIndex} className="px-4 py-3 text-sm text-gray-700 border-b border-gray-200">
+                  <td
+                    key={cellIndex}
+                    className="px-4 py-3 text-sm text-gray-700 border-b border-gray-200"
+                  >
                     {formatCell(cell)}
                   </td>
                 ))}
@@ -99,17 +106,23 @@ const DataPreview = ({ sheets, activeSheet, setActiveSheet, setSheets }) => {
             disabled={currentPage === 1}
             onClick={() => setCurrentPage((prev) => prev - 1)}
             className={`px-4 py-2 border rounded-md shadow-sm transition ${
-              currentPage === 1 ? "text-gray-400 cursor-not-allowed" : "hover:bg-gray-100 cursor-pointer"
+              currentPage === 1
+                ? "text-gray-400 cursor-not-allowed"
+                : "hover:bg-gray-100 cursor-pointer"
             }`}
           >
             Previous
           </button>
-          <span className="text-sm text-gray-600">Page {currentPage} of {totalPages}</span>
+          <span className="text-sm text-gray-600">
+            Page {currentPage} of {totalPages}
+          </span>
           <button
             disabled={currentPage === totalPages}
             onClick={() => setCurrentPage((prev) => prev + 1)}
             className={`px-4 py-2 border rounded-md shadow-sm transition ${
-              currentPage === totalPages ? "text-gray-400 cursor-not-allowed" : "hover:bg-gray-100 cursor-pointer"
+              currentPage === totalPages
+                ? "text-gray-400 cursor-not-allowed"
+                : "hover:bg-gray-100 cursor-pointer"
             }`}
           >
             Next
